@@ -1,16 +1,179 @@
-
 .footer {
-    background-color: #282c34;
-    padding: 10px;
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  min-height: 94px;
+  background: linear-gradient(to right, #111827, #1e293b, #111827);
+  border-top: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 1000;
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(transparent 1px, transparent 1px),
+    linear-gradient(to right, transparent 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(6, 182, 212, 0.05);
+}
+
+.footer-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 2px;
+  ;
+}
+
+.footer-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shield-icon {
+  width: 50px;
+  height: 50px;
+  color: rgb(55, 255, 0);
+}
+
+.copyright {
+  color: rgb(209, 213, 219);
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.brand-text {
+  background: linear-gradient(to right, rgb(34, 211, 238), rgb(59, 130, 246));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 600;
+  font-size: large;
+}
+
+.social-icons {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+  color: rgb(34, 238, 95);
+  transition: all 0.3s ease;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  border-radius: 50%;
+  background-color: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  transition: all 0.3s ease;
+  width: 48px;
+  height: 48px;
+}
+
+.social-icons a:hover {
+  background-color: rgba(6, 182, 212, 0.2);
+  transform: translateY(-2px);
+}
+
+.social-icons a:hover .social-icon {
+  color: rgb(59, 130, 246);
+}
+
+.social-icons a:focus {
+  outline: 2px solid rgb(34, 211, 238);
+  outline-offset: 2px;
+}
+
+.social-icons a:focus-visible {
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.3);
+}
+
+.credit-text {
+  color: rgb(209, 213, 219);
+  font-size: 0.8rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.highlight {
+  color: rgb(34, 211, 238);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .footer-main {
+    flex-direction: column;
+    gap: 16px;
     text-align: center;
-    color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
   }
-  
-  .footer p {
-    margin: 0;
-    font-size: 0.9em;
+
+  .brand-section {
+    flex-direction: column;
+    align-items: center;
   }
-  
+
+  .social-icons {
+    justify-content: center;
+  }
+
+  .social-icons a {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+  }
+
+  .social-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer {
+    position: relative;
+    bottom: auto;
+  }
+
+  .social-icons {
+    gap: 12px;
+  }
+
+  .social-icons a {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+  }
+}

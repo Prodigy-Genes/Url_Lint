@@ -1,29 +1,62 @@
-
 .loading-spinner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  background: linear-gradient(to right, #111827, #1e293b, #111827);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 16px;
+  margin: 40px auto;
+  max-width: 400px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(transparent 1px, transparent 1px),
+    linear-gradient(to right, transparent 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.spinner {
+  border: 8px solid rgba(6, 182, 212, 0.2);
+  border-top: 8px solid rgb(34, 211, 238);
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.3);
+}
+
+@keyframes spin {
+  0% { 
+    transform: rotate(0deg) scale(0.8);
   }
-  
-  .spinner {
-    border: 8px solid #f3f3f3; /* Light gray */
-    border-top: 8px solid #282c34; /* Dark color for spinner */
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 2s linear infinite;
+  50% {
+    transform: rotate(180deg) scale(1.2);
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  100% { 
+    transform: rotate(360deg) scale(0.8);
   }
-  
-  .loading-spinner p {
-    margin-top: 10px;
-    font-size: 1.2em;
-    font-weight: bold;
-  }
-  
+}
+
+.loading-spinner p {
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: rgb(209, 213, 219);
+  background: linear-gradient(to right, rgb(34, 211, 238), rgb(59, 130, 246));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

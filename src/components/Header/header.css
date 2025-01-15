@@ -1,13 +1,171 @@
-
 .header {
-    background-color: #282c34;
-    padding: 20px;
-    text-align: center;
-    color: white;
+  position: relative;
+  width: 100%;
+  height: 96px;
+  background: linear-gradient(to right, #111827, #1e293b, #111827);
+  border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(6, 182, 212, 0.05);
+}
+
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(transparent 1px, transparent 1px),
+    linear-gradient(to right, transparent 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.1;
+}
+
+.header-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 32px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.shield-icon {
+  width: 40px;
+  height: 40px;
+  color: rgb(0, 255, 64);
+  transition: all 1s ease;
+}
+
+.shield-icon.glow-active {
+  opacity: 1;
+  filter: drop-shadow(0 0 10px rgb(215, 244, 0));
+}
+
+.shield-icon:not(.glow-active) {
+  opacity: 0.8;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-text {
+  font-size: 1.875rem;
+  font-weight: 700;
+  background: linear-gradient(to right, rgb(34, 211, 238), rgb(26, 114, 255));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
+}
+
+.terminal-icon {
+  width: 24px;
+  height: 24px;
+  color: rgb(47, 193, 255);
+}
+
+.nav-menu {
+  display: none;
+  align-items: center;
+  gap: 32px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 1200px) {
+  .header-content {
+    padding: 0 24px;
   }
-  
-  .header h1 {
-    margin: 0;
-    font-size: 2em;
+}
+
+@media (max-width: 992px) {
+  .header {
+    height: 80px;
   }
-  
+
+  .header-content {
+    padding: 0 16px;
+  }
+
+  .brand-text {
+    font-size: 1.5rem;
+  }
+
+  .shield-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .terminal-icon {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    height: 72px;
+  }
+
+  .header-content {
+    padding: 0 12px;
+  }
+
+  .brand-text {
+    font-size: 1.375rem;
+  }
+
+  .shield-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .terminal-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    height: 64px;
+  }
+
+  .header-content {
+    padding: 0 8px;
+  }
+
+  .brand-text {
+    font-size: 1.25rem;
+  }
+
+  .shield-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .terminal-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .logo-section {
+    gap: 8px;
+  }
+}
+
+
+
+
+

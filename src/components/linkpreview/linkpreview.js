@@ -1,5 +1,6 @@
 import React, { useEffect, useReducer } from 'react';
 import axios from 'axios';
+import { Shield, Globe, AlertTriangle, CheckCircle, Server, Radio, Lock } from 'lucide-react';
 import './linkpreview.css';
 import LoadingSpinner from '../loadingspinner/loadingspinner';
 import { fetchIPInfo, fetchGoogleSafeBrowsingData, fetchVirusTotalData, fetchSSLData } from '../../services/api';
@@ -44,7 +45,7 @@ const LinkPreview = ({ url }) => {
 
       try {
         // Fetch link preview data
-        const apiKey = process.env.REACT_APP_LINK_PREVIEW_API_KEY;
+        const apiKey =process.env.REACT_APP_LINKPREVIEW_API_KEY;
         const previewResponse = await axios.get(`https://api.linkpreview.net`, {
           params: {
             key: apiKey,
@@ -130,6 +131,7 @@ const LinkPreview = ({ url }) => {
   if (error) {
     return (
       <div className="link-preview error">
+        <AlertTriangle className="error-icon" />
         <p>{error}</p>
       </div>
     );
@@ -138,6 +140,7 @@ const LinkPreview = ({ url }) => {
   if (!previewData) {
     return (
       <div className="link-preview error">
+        <AlertTriangle className="error-icon" />
         <p>No preview available for this URL.</p>
       </div>
     );
@@ -145,86 +148,143 @@ const LinkPreview = ({ url }) => {
 
   return (
     <div className="link-preview">
+      {/* Grid overlay */}
+      <div className="grid-overlay"></div>
+      
+      {/* Ambient glow */}
+      <div className="ambient-glow"></div>
+
       <div className="preview-content">
-        <h2>{previewData.title}</h2>
+        <div className="preview-header">
+          <Globe className="preview-icon" />
+          <h2>{previewData.title}</h2>
+        </div>
+        
         <p>{previewData.description}</p>
-        {previewData.image ? (
-          <img
-            src={previewData.image}
-            alt="Thumbnail"
-            className="thumbnail"
-            onError={(e) => {
-              e.target.onerror = null;
-              e.target.src = 'fallback-image.jpg';
-            }}
-          />
-        ) : (
-          <p>No image available</p>
+        {previewData.image && (
+          <div className="image-container">
+            <img
+              src={previewData.image}
+              alt="Thumbnail"
+              className="thumbnail"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'fallback-image.jpg';
+              }}
+            />
+          </div>
         )}
         <a href={url} target="_blank" rel="noopener noreferrer" className="preview-link">
+          <Globe className="link-icon" />
           Visit Site
         </a>
       </div>
 
       {securityData && (
         <div className="security-info">
-          <h3>Security Information</h3>
+          <div className="section-header">
+            <Shield className="section-icon" />
+            <h3>Security Analysis</h3>
+          </div>
           
-          <div className="security-item">
-            <h4>Google Safe Browsing</h4>
-            {securityData.safeBrowsing.error ? (
-              <p>Unable to fetch safety data</p>
-            ) : (
-              <p className={securityData.safeBrowsing.isSafe ? 'safe' : 'unsafe'}>
-                {securityData.safeBrowsing.isSafe ? '✓ Safe to visit' : '⚠ Potential security risk'}
-              </p>
-            )}
-          </div>
-
-          <div className="security-item">
-            <h4>VirusTotal Scan</h4>
-            {securityData.virusTotal.error ? (
-              <p>Unable to fetch scan data</p>
-            ) : securityData.virusTotal.status === 'pending' ? (
-              <p>Scan in progress...</p>
-            ) : (
-              <div>
-                <p>Malicious: {securityData.virusTotal.stats?.malicious || 0}</p>
-                <p>Clean: {securityData.virusTotal.stats?.harmless || 0}</p>
+          <div className="security-grid">
+            <div className="security-item">
+              <div className="item-header">
+                <Radio className="item-icon" />
+                <h4>Google Safe Browsing</h4>
               </div>
-            )}
-          </div>
+              {securityData.safeBrowsing.error ? (
+                <p className="status-text">Unable to fetch safety data</p>
+              ) : (
+                <p className={securityData.safeBrowsing.isSafe ? 'safe' : 'unsafe'}>
+                  {securityData.safeBrowsing.isSafe ? (
+                    <>
+                      <CheckCircle className="status-icon" />
+                      Safe to visit
+                    </>
+                  ) : (
+                    <>
+                      <AlertTriangle className="status-icon" />
+                      Potential security risk
+                    </>
+                  )}
+                </p>
+              )}
+            </div>
 
-          <div className="security-item">
-            <h4>SSL Certificate</h4>
-            {securityData.ssl.error ? (
-              <p>Unable to fetch SSL data</p>
-            ) : (
-              <div>
-                <p>Grade: {securityData.ssl.grade || 'N/A'}</p>
-                <p>Valid until: {securityData.ssl.cert?.validTo || 'N/A'}</p>
+            <div className="security-item">
+              <div className="item-header">
+                <Server className="item-icon" />
+                <h4>VirusTotal Scan</h4>
               </div>
-            )}
+              {securityData.virusTotal.error ? (
+                <p className="status-text">{securityData.virusTotal.error}</p>
+              ) : securityData.virusTotal.status === 'pending' ? (
+                <p className="status-text">Scan in progress...</p>
+              ) : (
+                <div className="stats-grid">
+                  <div className={`stat-item ${securityData.virusTotal.stats?.malicious > 0 ? 'warning' : ''}`}>
+                    <span>Malicious</span>
+                    <span>{securityData.virusTotal.stats?.malicious || 0}</span>
+                  </div>
+                  <div className="stat-item safe">
+                    <span>Clean</span>
+                    <span>{securityData.virusTotal.stats?.harmless || 0}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="security-item">
+              <div className="item-header">
+                <Lock className="item-icon" />
+                <h4>SSL Certificate</h4>
+              </div>
+              {securityData.ssl.error ? (
+                <p className="status-text">Unable to fetch SSL data</p>
+              ) : (
+                <div className="ssl-info">
+                  <div className="grade">
+                    <span>Grade</span>
+                    <span className={`grade-value grade-${securityData.ssl.grade?.toLowerCase() || 'na'}`}>
+                      {securityData.ssl.grade || 'N/A'}
+                    </span>
+                  </div>
+                  <div className="validity">
+                    <span>Valid until</span>
+                    <span>{securityData.ssl.cert?.validTo || 'N/A'}</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
 
-      {ipInfo && (
+      {ipInfo && !ipInfo.error && (
         <div className="ip-info">
-          <h3>IP Information</h3>
-          {ipInfo.error ? (
-            <p>Unable to fetch IP information</p>
-          ) : (
-            <div>
-              <p>IP: {ipInfo.ip}</p>
-              <p>City: {ipInfo.city}</p>
-              <p>Region: {ipInfo.region}</p>
-              <p>Country: {ipInfo.country}</p>
-              <p>Location: {ipInfo.loc}</p>
-              <p>Organization: {ipInfo.org}</p>
-              <p>Timezone: {ipInfo.timezone}</p>
+          <div className="section-header">
+            <Server className="section-icon" />
+            <h3>Server Information</h3>
+          </div>
+          <div className="info-grid">
+            <div className="info-item">
+              <span>IP Address</span>
+              <span>{ipInfo.ip}</span>
             </div>
-          )}
+            <div className="info-item">
+              <span>Location</span>
+              <span>{`${ipInfo.city}, ${ipInfo.region}, ${ipInfo.country}`}</span>
+            </div>
+            <div className="info-item">
+              <span>Organization</span>
+              <span>{ipInfo.org}</span>
+            </div>
+            <div className="info-item">
+              <span>Timezone</span>
+              <span>{ipInfo.timezone}</span>
+            </div>
+          </div>
         </div>
       )}
     </div>
