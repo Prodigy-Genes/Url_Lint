@@ -45,6 +45,7 @@ const LinkPreview = ({ url }) => {
 
       try {
         // Fetch link preview data
+
         const apiKey =process.env.REACT_APP_LINKPREVIEW_API_KEY;
         const previewResponse = await axios.get(`https://api.linkpreview.net`, {
           params: {
