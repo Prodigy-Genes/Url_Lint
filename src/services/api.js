@@ -38,7 +38,7 @@ export const fetchIPInfo = async (hostname) => {
 
 // VirusTotal API: Scan URL for malware or phishing
 export const fetchVirusTotalData = async (url) => {
-  const apiKey = process.env.REACT_APP_VIRUS_TOTAL_API_KEY;
+  const apiKey = process.env.VIRUS_TOTAL_API_KEY;
   
   if (!url) {
     throw new Error('URL is required');
