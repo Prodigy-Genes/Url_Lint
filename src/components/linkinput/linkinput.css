@@ -213,29 +213,29 @@
 
 @media (max-width: 360px) {
   .link-input-container {
-    margin: 8px 4px;
-    padding: 10px 6px;
-    max-width: 200px;
+    margin: 10px 6px;
+    padding: 12px 8px;
+    max-width: 250px;
   }
 
   .input-content {
-    width: 70%;
-    max-width: 160px;
+    width: 75%;
+    max-width: 200px;
     margin: 0 auto;
   }
 
   .input-wrapper {
     width: 100%;
-    max-width: 160px;
+    max-width: 200px;
   }
 
   .submit-btn {
     width: 100%;
-    max-width: 160px;
+    max-width: 200px;
   }
 
   .input-header {
-    gap: 3px;
-    margin-bottom: 10px;
+    gap: 4px;
+    margin-bottom: 12px;
   }
 }
