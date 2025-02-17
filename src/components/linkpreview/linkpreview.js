@@ -45,8 +45,7 @@ const LinkPreview = ({ url }) => {
 
       try {
         // Fetch link preview data
-
-        const apiKey =process.env.REACT_APP_LINKPREVIEW_API_KEY;
+        const apiKey = process.env.REACT_APP_LINKPREVIEW_API_KEY;
         const previewResponse = await axios.get(`https://api.linkpreview.net`, {
           params: {
             key: apiKey,
@@ -64,36 +63,6 @@ const LinkPreview = ({ url }) => {
           image: previewResponse.data.image || null,
         };
 
-         /*
-        try {
-          const apiKey = process.env.REACT_APP_SCRAPER_API_KEY;
-          const response = await axios.get(`https://api.scraperapi.com`, {
-            params: {
-              api_key: apiKey,
-              url: url,
-              render: true,
-            },
-          });
-
-          const html = response.data;
-          
-          const titleMatch = html.match(/<title>(.*?)<\/title>/);
-          const descriptionMatch = html.match(/<meta name="description" content="(.*?)">/);
-          const ogTitleMatch = html.match(/<meta property="og:title" content="(.*?)">/);
-          const ogDescriptionMatch = html.match(/<meta property="og:description" content="(.*?)">/);
-          const ogImageMatch = html.match(/<meta property="og:image" content="(.*?)">/);
-
-          const title = ogTitleMatch ? ogTitleMatch[1] : titleMatch ? titleMatch[1] : 'No title available';
-          const description = ogDescriptionMatch ? ogDescriptionMatch[1] : descriptionMatch ? descriptionMatch[1] : 'No description available';
-          const image = ogImageMatch ? ogImageMatch[1] : null;
-
-          setPreviewData({
-            title,
-            description,
-            image,
-          });
-        */
-
         // Fetch security data in parallel
         const [safeBrowsingData, virusTotalData, sslData, ipInfoData] = await Promise.allSettled([
           fetchGoogleSafeBrowsingData(url),
@@ -102,15 +71,30 @@ const LinkPreview = ({ url }) => {
           fetchIPInfo(new URL(url).hostname)
         ]);
 
-        const securityData = {
-          safeBrowsing: safeBrowsingData.status === 'fulfilled' ? safeBrowsingData.value : { error: 'Failed to fetch' },
-          virusTotal: virusTotalData.status === 'fulfilled' ? virusTotalData.value : { error: 'Failed to fetch' },
-          ssl: sslData.status === 'fulfilled' ? sslData.value : { error: 'Failed to fetch' }
-        };
+        // Only include successful API responses
+        const securityData = {};
+        
+        if (safeBrowsingData.status === 'fulfilled' && !safeBrowsingData.value.error) {
+          securityData.safeBrowsing = safeBrowsingData.value;
+        }
+        
+        if (virusTotalData.status === 'fulfilled' && !virusTotalData.value.error) {
+          securityData.virusTotal = virusTotalData.value;
+        }
+        
+        if (sslData.status === 'fulfilled' && !sslData.value.error) {
+          securityData.ssl = sslData.value;
+        }
 
-        const ipInfo = ipInfoData.status === 'fulfilled' ? ipInfoData.value : { error: 'Failed to fetch' };
+        // Only include IP info if successful
+        const ipInfo = ipInfoData.status === 'fulfilled' && !ipInfoData.value.error ? 
+                        ipInfoData.value : null;
 
-        dispatch({ type: 'FETCH_SUCCESS', payload: { previewData, securityData, ipInfo } });
+        dispatch({ type: 'FETCH_SUCCESS', payload: { 
+          previewData, 
+          securityData: Object.keys(securityData).length > 0 ? securityData : null,
+          ipInfo 
+        }});
 
       } catch (err) {
         console.error('Error fetching data:', err);
@@ -181,7 +165,7 @@ const LinkPreview = ({ url }) => {
         </a>
       </div>
 
-      {securityData && (
+      {securityData && Object.keys(securityData).length > 0 && (
         <div className="security-info">
           <div className="section-header">
             <Shield className="section-icon" />
@@ -189,14 +173,12 @@ const LinkPreview = ({ url }) => {
           </div>
           
           <div className="security-grid">
-            <div className="security-item">
-              <div className="item-header">
-                <Radio className="item-icon" />
-                <h4>Google Safe Browsing</h4>
-              </div>
-              {securityData.safeBrowsing.error ? (
-                <p className="status-text">Unable to fetch safety data</p>
-              ) : (
+            {securityData.safeBrowsing && (
+              <div className="security-item">
+                <div className="item-header">
+                  <Radio className="item-icon" />
+                  <h4>Google Safe Browsing</h4>
+                </div>
                 <p className={securityData.safeBrowsing.isSafe ? 'safe' : 'unsafe'}>
                   {securityData.safeBrowsing.isSafe ? (
                     <>
@@ -210,40 +192,38 @@ const LinkPreview = ({ url }) => {
                     </>
                   )}
                 </p>
-              )}
-            </div>
-
-            <div className="security-item">
-              <div className="item-header">
-                <Server className="item-icon" />
-                <h4>VirusTotal Scan</h4>
               </div>
-              {securityData.virusTotal.error ? (
-                <p className="status-text">{securityData.virusTotal.error}</p>
-              ) : securityData.virusTotal.status === 'pending' ? (
-                <p className="status-text">Scan in progress...</p>
-              ) : (
-                <div className="stats-grid">
-                  <div className={`stat-item ${securityData.virusTotal.stats?.malicious > 0 ? 'warning' : ''}`}>
-                    <span>Malicious</span>
-                    <span>{securityData.virusTotal.stats?.malicious || 0}</span>
-                  </div>
-                  <div className="stat-item safe">
-                    <span>Clean</span>
-                    <span>{securityData.virusTotal.stats?.harmless || 0}</span>
-                  </div>
+            )}
+
+            {securityData.virusTotal && (
+              <div className="security-item">
+                <div className="item-header">
+                  <Server className="item-icon" />
+                  <h4>VirusTotal Scan</h4>
                 </div>
-              )}
-            </div>
-
-            <div className="security-item">
-              <div className="item-header">
-                <Lock className="item-icon" />
-                <h4>SSL Certificate</h4>
+                {securityData.virusTotal.status === 'pending' ? (
+                  <p className="status-text">Scan in progress...</p>
+                ) : (
+                  <div className="stats-grid">
+                    <div className={`stat-item ${securityData.virusTotal.stats?.malicious > 0 ? 'warning' : ''}`}>
+                      <span>Malicious</span>
+                      <span>{securityData.virusTotal.stats?.malicious || 0}</span>
+                    </div>
+                    <div className="stat-item safe">
+                      <span>Clean</span>
+                      <span>{securityData.virusTotal.stats?.harmless || 0}</span>
+                    </div>
+                  </div>
+                )}
               </div>
-              {securityData.ssl.error ? (
-                <p className="status-text">Unable to fetch SSL data</p>
-              ) : (
+            )}
+
+            {securityData.ssl && (
+              <div className="security-item">
+                <div className="item-header">
+                  <Lock className="item-icon" />
+                  <h4>SSL Certificate</h4>
+                </div>
                 <div className="ssl-info">
                   <div className="grade">
                     <span>Grade</span>
@@ -256,13 +236,13 @@ const LinkPreview = ({ url }) => {
                     <span>{securityData.ssl.cert?.validTo || 'N/A'}</span>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       )}
 
-      {ipInfo && !ipInfo.error && (
+      {ipInfo && (
         <div className="ip-info">
           <div className="section-header">
             <Server className="section-icon" />
