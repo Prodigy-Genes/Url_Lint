@@ -131,60 +131,111 @@
 /* Responsive Styles */
 @media (max-width: 1024px) {
   .link-input-container {
-    margin: 30px 20px;
-    padding: 28px 20px;
+    margin: 25px 15px;
+    padding: 20px 12px;
+    max-width: 500px;
   }
 
-  .input-title {
-    font-size: 1.375rem;
+  .input-content {
+    width: 85%;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
-  .link-input {
-    font-size: 1.1rem;
-    padding: 14px;
+  .input-wrapper {
+    width: 100%;
+    max-width: 400px;
   }
 
   .submit-btn {
-    padding: 14px 28px;
+    width: 100%;
+    max-width: 400px;
   }
 }
 
 @media (max-width: 768px) {
   .link-input-container {
-    margin: 20px 16px;
-    padding: 24px 16px;
+    margin: 15px 10px;
+    padding: 16px 10px;
+    max-width: 350px;
   }
 
-  .input-title {
-    font-size: 1.25rem;
+  .input-content {
+    width: 80%;
+    max-width: 300px;
+    margin: 0 auto;
   }
 
-  .link-input {
-    font-size: 1rem;
-    padding: 12px;
+  .input-wrapper {
+    width: 100%;
+    max-width: 300px;
   }
 
   .submit-btn {
-    padding: 12px 24px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .input-header {
+    gap: 6px;
+    margin-bottom: 16px;
   }
 }
 
 @media (max-width: 480px) {
   .link-input-container {
-    margin: 15px 10px;
-    padding: 20px 10px;
+    margin: 10px 6px;
+    padding: 12px 8px;
+    max-width: 250px;
   }
 
-  .input-title {
-    font-size: 1.125rem;
+  .input-content {
+    width: 75%;
+    max-width: 200px;
+    margin: 0 auto;
   }
 
-  .link-input {
-    font-size: 0.9rem;
-    padding: 10px;
+  .input-wrapper {
+    width: 100%;
+    max-width: 200px;
   }
 
   .submit-btn {
-    padding: 10px 20px;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .input-header {
+    gap: 4px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .link-input-container {
+    margin: 8px 4px;
+    padding: 10px 6px;
+    max-width: 200px;
+  }
+
+  .input-content {
+    width: 70%;
+    max-width: 160px;
+    margin: 0 auto;
+  }
+
+  .input-wrapper {
+    width: 100%;
+    max-width: 160px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    max-width: 160px;
+  }
+
+  .input-header {
+    gap: 3px;
+    margin-bottom: 10px;
   }
 }
